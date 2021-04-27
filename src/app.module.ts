@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { SmartItemModule } from './smartitem/smart-item.module';
 
 @Module({
-  imports: [],
+  imports: [SmartItemModule],
   controllers: [],
   providers: [],
 })
