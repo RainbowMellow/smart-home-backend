@@ -24,7 +24,8 @@ export class LogService {
     return this.logMessages;
   }
 
-  addNewLogMessage(message: LogMessage): void {
+  addNewLogMessage(message: LogMessage): LogMessage {
     this.logMessages.push(message);
+    return message;
   }
 }
