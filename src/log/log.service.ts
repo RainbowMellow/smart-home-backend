@@ -4,6 +4,7 @@ import { LogMessage } from './log-message.model';
 @Injectable()
 export class LogService {
   logMessages: LogMessage[] = [];
+  nextId = 0;
 
   constructor() {
     this.seedData();
@@ -11,7 +12,6 @@ export class LogService {
 
   private seedData() {
     const message1: LogMessage = {
-      id: 1,
       message: 'Log was created',
       user: 'Mock user',
       item: null,
@@ -25,6 +25,7 @@ export class LogService {
   }
 
   addNewLogMessage(message: LogMessage): LogMessage {
+    message.id = this.nextId++;
     this.logMessages.push(message);
     return message;
   }
