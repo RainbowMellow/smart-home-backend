@@ -17,7 +17,14 @@ export class LogService {
       item: null,
       timeStamp: new Date(),
     };
+    const message2: LogMessage = {
+      message: 'All items are off',
+      user: 'Mock user',
+      item: null,
+      timeStamp: new Date(),
+    };
     this.addNewLogMessage(message1);
+    this.addNewLogMessage(message2);
   }
 
   getAllLogMessages(): LogMessage[] {
