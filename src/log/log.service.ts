@@ -4,7 +4,7 @@ import { LogMessage } from './log-message.model';
 @Injectable()
 export class LogService {
   logMessages: LogMessage[] = [];
-  nextId = 0;
+  nextId = 1;
 
   constructor() {
     this.seedData();
@@ -13,13 +13,11 @@ export class LogService {
   private seedData() {
     const message1: LogMessage = {
       message: 'Log was created',
-      user: 'Mock user',
       item: null,
       timeStamp: new Date(),
     };
     const message2: LogMessage = {
       message: 'All items are off',
-      user: 'Mock user',
       item: null,
       timeStamp: new Date(),
     };

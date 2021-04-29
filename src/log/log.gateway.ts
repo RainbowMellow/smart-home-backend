@@ -26,7 +26,7 @@ export class LogGateway {
     @MessageBody() message: LogMessage,
     @ConnectedSocket() client: Socket,
   ): void {
-    message.user = client.id;
+    // message.user = client.id;
     const loggedMessage = this.logService.addNewLogMessage(message);
     this.server.emit('newLogMessage', loggedMessage);
   }
