@@ -15,12 +15,12 @@ export class UserGateway {
 
   @WebSocketServer() server;
 
-  @SubscribeMessage('addUser')
+  @SubscribeMessage('requestLogin')
   handleAddUser(
     @MessageBody() user: User,
     @ConnectedSocket() client: Socket,
   ): void {
-    const newUser = this.userService.addUser(user);
-    client.emit('addedUser', newUser);
+    const loggedInUser = this.userService.login(user);
+    client.emit('loggedIn', loggedInUser);
   }
 }

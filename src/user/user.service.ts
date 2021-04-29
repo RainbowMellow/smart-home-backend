@@ -11,4 +11,9 @@ export class UserService {
     this.users.push(user);
     return user;
   }
+
+  login(user: User): User {
+    // can be changed later
+    return this.addUser(user);
+  }
 }
