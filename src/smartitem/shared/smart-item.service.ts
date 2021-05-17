@@ -23,34 +23,47 @@ export class SmartItemService {
       id: 3,
       name: 'Thermostat',
     };
+    const cat4: Category = {
+      id: 4,
+      name: 'Switch',
+    };
 
     const item1: SmartItem = {
       id: 1,
       name: 'Bedroom lamp',
       category: cat1,
-      xPos: 1,
-      yPos: 1,
+      xPos: 10,
+      yPos: 10,
       on: false,
     };
     const item2: SmartItem = {
       id: 2,
       name: 'Kitchen oven',
       category: cat2,
-      xPos: 2,
-      yPos: 2,
+      xPos: 100,
+      yPos: 100,
       on: true,
     };
     const item3: SmartItem = {
       id: 3,
       name: 'Living room thermostat',
       category: cat3,
-      xPos: 3,
-      yPos: 3,
+      xPos: 200,
+      yPos: 150,
+      on: false,
+    };
+    const item4: SmartItem = {
+      id: 3,
+      name: 'Switch',
+      category: cat4,
+      xPos: 250,
+      yPos: 100,
       on: false,
     };
     this.smartItems.push(item1);
     this.smartItems.push(item2);
     this.smartItems.push(item3);
+    this.smartItems.push(item4);
   }
 
   getAllSmartItems(): SmartItem[] {
