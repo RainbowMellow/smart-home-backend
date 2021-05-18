@@ -69,4 +69,15 @@ export class SmartItemService {
   getAllSmartItems(): SmartItem[] {
     return this.smartItems;
   }
+
+  deleteSmartItem(smartItem: SmartItem): SmartItem {
+    this.smartItems.filter((s) => s.id !== smartItem.id);
+    return smartItem;
+  }
+
+  editSmartItem(smartItem: SmartItem): SmartItem {
+    const index = this.smartItems.findIndex((s) => s.id === smartItem.id);
+    this.smartItems[index] = smartItem;
+    return smartItem;
+  }
 }
