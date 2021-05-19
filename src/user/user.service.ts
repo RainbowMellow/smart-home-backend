@@ -12,8 +12,17 @@ export class UserService {
     return user;
   }
 
+  removeUser(user: User): User {
+    this.users.filter((u) => u.id === user.id);
+    return user;
+  }
+
   login(user: User): User {
     // can be changed later
     return this.addUser(user);
+  }
+
+  logout(user: User): User {
+    return this.removeUser(user);
   }
 }
