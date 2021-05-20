@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { SmartItem } from './smart-item.model';
-import { Category } from './category.model';
+import { Category } from '../../category/category.model';
 
 @Injectable()
 export class SmartItemService {

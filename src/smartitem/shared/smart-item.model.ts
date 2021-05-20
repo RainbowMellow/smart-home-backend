@@ -1,4 +1,4 @@
-import { Category } from './category.model';
+import { Category } from '../../category/category.model';
 
 export interface SmartItem {
   id?: number;
