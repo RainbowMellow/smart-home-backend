@@ -10,6 +10,7 @@ import { Socket } from 'socket.io';
 import { SmartItem } from './shared/smart-item.model';
 import { CreateSmartItemDto } from '../infrastructure/data-source/dtos/createSmartItem.dto';
 import { EditSmartItemDto } from '../infrastructure/data-source/dtos/editSmartItem.dto';
+import { ToggleDto } from '../infrastructure/data-source/dtos/toggle.dto';
 
 @WebSocketGateway()
 export class SmartItemGateway {
@@ -40,5 +41,13 @@ export class SmartItemGateway {
   handleCreateSmartItem(@MessageBody() item: CreateSmartItemDto) {
     const createdSmartItem = this.siService.createSmartItem(item);
     this.server.emit('createdSmartItem', createdSmartItem);
+  }
+
+  @SubscribeMessage('toggleSmartItem')
+  async handleToggleSmartItem(@MessageBody() item: ToggleDto) {
+    this.server.emit(
+      'toggledSmartItem',
+      await this.siService.toggleSmartItem(item),
+    );
   }
 }
