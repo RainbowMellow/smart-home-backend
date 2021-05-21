@@ -1,83 +1,49 @@
 import { Injectable } from '@nestjs/common';
 import { SmartItem } from './smart-item.model';
-import { Category } from './category.model';
+import { Category } from '../../category/category.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { SmartItemEntity } from '../../infrastructure/data-source/entities/smartItem.entity';
+import { Repository } from 'typeorm';
+import { CreateSmartItemDto } from '../../infrastructure/data-source/dtos/createSmartItem.dto';
+import { EditSmartItemDto } from '../../infrastructure/data-source/dtos/editSmartItem.dto';
 
 @Injectable()
 export class SmartItemService {
-  smartItems: SmartItem[] = [];
+  constructor(
+    @InjectRepository(SmartItemEntity)
+    private smartItemRepo: Repository<SmartItemEntity>,
+  ) {}
 
-  constructor() {
-    this.seedData();
+  async getAllSmartItems() {
+    const smartItems = await this.smartItemRepo.find();
+    return smartItems;
   }
 
-  seedData(): void {
-    const cat1: Category = {
-      id: 1,
-      name: 'Lamp',
-    };
-    const cat2: Category = {
-      id: 2,
-      name: 'Oven',
-    };
-    const cat3: Category = {
-      id: 3,
-      name: 'Thermostat',
-    };
-    const cat4: Category = {
-      id: 4,
-      name: 'Switch',
-    };
-
-    const item1: SmartItem = {
-      id: 1,
-      name: 'Bedroom lamp',
-      category: cat1,
-      xPos: 10,
-      yPos: 10,
-      on: false,
-    };
-    const item2: SmartItem = {
-      id: 2,
-      name: 'Kitchen oven',
-      category: cat2,
-      xPos: 100,
-      yPos: 100,
-      on: true,
-    };
-    const item3: SmartItem = {
-      id: 3,
-      name: 'Living room thermostat',
-      category: cat3,
-      xPos: 200,
-      yPos: 150,
-      on: false,
-    };
-    const item4: SmartItem = {
-      id: 3,
-      name: 'Switch',
-      category: cat4,
-      xPos: 250,
-      yPos: 100,
-      on: false,
-    };
-    this.smartItems.push(item1);
-    this.smartItems.push(item2);
-    this.smartItems.push(item3);
-    this.smartItems.push(item4);
+  async deleteSmartItem(smartItem: SmartItem) {
+    const deletedSmartItem = await this.smartItemRepo.delete(smartItem);
+    return deletedSmartItem;
   }
 
-  getAllSmartItems(): SmartItem[] {
-    return this.smartItems;
+  async editSmartItem(smartItemDTO: EditSmartItemDto) {
+    const updatedSmartItem = await this.smartItemRepo.update(smartItemDTO.id, {
+      name: smartItemDTO.name,
+      category: smartItemDTO.category,
+      xPos: smartItemDTO.xPos,
+      yPos: smartItemDTO.yPos,
+    });
+
+    return updatedSmartItem;
   }
 
-  deleteSmartItem(smartItem: SmartItem): SmartItem {
-    this.smartItems.filter((s) => s.id !== smartItem.id);
-    return smartItem;
-  }
+  async createSmartItem(smartItemDTO: CreateSmartItemDto) {
+    let newSmartItem = this.smartItemRepo.create();
+    newSmartItem.name = smartItemDTO.name;
+    newSmartItem.category = smartItemDTO.category;
+    newSmartItem.on = smartItemDTO.on;
+    newSmartItem.xPos = smartItemDTO.xPos;
+    newSmartItem.yPos = smartItemDTO.yPos;
+    newSmartItem = await this.smartItemRepo.save(newSmartItem);
 
-  editSmartItem(smartItem: SmartItem): SmartItem {
-    const index = this.smartItems.findIndex((s) => s.id === smartItem.id);
-    this.smartItems[index] = smartItem;
-    return smartItem;
+    return newSmartItem;
   }
 }
