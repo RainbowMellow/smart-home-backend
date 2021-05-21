@@ -23,4 +23,13 @@ export class UserGateway {
     const loggedInUser = this.userService.login(user);
     client.emit('loggedIn', loggedInUser);
   }
+
+  @SubscribeMessage('requestLogout')
+  handleRemoveUser(
+    @MessageBody() user: User,
+    @ConnectedSocket() client: Socket,
+  ): void {
+    const loggedOutUser = this.userService.logout(user);
+    client.emit('loggedOut', loggedOutUser);
+  }
 }
