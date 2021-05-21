@@ -12,66 +12,7 @@ export class SmartItemService {
   constructor(
     @InjectRepository(SmartItemEntity)
     private smartItemRepo: Repository<SmartItemEntity>,
-  ) {
-    this.seedData();
-  }
-
-  seedData(): void {
-    const cat1: Category = {
-      id: 1,
-      name: 'Lamp',
-    };
-    const cat2: Category = {
-      id: 2,
-      name: 'Oven',
-    };
-    const cat3: Category = {
-      id: 3,
-      name: 'Thermostat',
-    };
-    const cat4: Category = {
-      id: 4,
-      name: 'Switch',
-    };
-
-    const item1: SmartItem = {
-      id: 1,
-      name: 'Bedroom lamp',
-      category: cat1,
-      xPos: 10,
-      yPos: 10,
-      on: false,
-    };
-    const item2: SmartItem = {
-      id: 2,
-      name: 'Kitchen oven',
-      category: cat2,
-      xPos: 100,
-      yPos: 100,
-      on: true,
-    };
-    const item3: SmartItem = {
-      id: 3,
-      name: 'Living room thermostat',
-      category: cat3,
-      xPos: 200,
-      yPos: 150,
-      on: false,
-    };
-    const item4: SmartItem = {
-      id: 3,
-      name: 'Switch',
-      category: cat4,
-      xPos: 250,
-      yPos: 100,
-      on: false,
-    };
-
-    this.smartItemRepo.create(item1);
-    this.smartItemRepo.create(item2);
-    this.smartItemRepo.create(item3);
-    this.smartItemRepo.create(item4);
-  }
+  ) {}
 
   async getAllSmartItems() {
     const smartItems = await this.smartItemRepo.find();
