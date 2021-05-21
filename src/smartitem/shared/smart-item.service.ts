@@ -1,12 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { SmartItem } from './smart-item.model';
 import { Category } from '../../category/category.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { SmartItemEntity } from '../../infrastructure/data-source/entities/smartItem.entity';
+import { Repository } from 'typeorm';
+import { CreateSmartItemDto } from '../../infrastructure/data-source/dtos/createSmartItem.dto';
+import { EditSmartItemDto } from '../../infrastructure/data-source/dtos/editSmartItem.dto';
 
 @Injectable()
 export class SmartItemService {
-  smartItems: SmartItem[] = [];
-
-  constructor() {
+  constructor(
+    @InjectRepository(SmartItemEntity)
+    private smartItemRepo: Repository<SmartItemEntity>,
+  ) {
     this.seedData();
   }
 
@@ -60,24 +66,43 @@ export class SmartItemService {
       yPos: 100,
       on: false,
     };
-    this.smartItems.push(item1);
-    this.smartItems.push(item2);
-    this.smartItems.push(item3);
-    this.smartItems.push(item4);
+
+    this.smartItemRepo.create(item1);
+    this.smartItemRepo.create(item2);
+    this.smartItemRepo.create(item3);
+    this.smartItemRepo.create(item4);
   }
 
-  getAllSmartItems(): SmartItem[] {
-    return this.smartItems;
+  async getAllSmartItems() {
+    const smartItems = await this.smartItemRepo.find();
+    return smartItems;
   }
 
-  deleteSmartItem(smartItem: SmartItem): SmartItem {
-    this.smartItems.filter((s) => s.id !== smartItem.id);
-    return smartItem;
+  async deleteSmartItem(smartItem: SmartItem) {
+    const deletedSmartItem = await this.smartItemRepo.delete(smartItem);
+    return deletedSmartItem;
   }
 
-  editSmartItem(smartItem: SmartItem): SmartItem {
-    const index = this.smartItems.findIndex((s) => s.id === smartItem.id);
-    this.smartItems[index] = smartItem;
-    return smartItem;
+  async editSmartItem(smartItemDTO: EditSmartItemDto) {
+    const updatedSmartItem = await this.smartItemRepo.update(smartItemDTO.id, {
+      name: smartItemDTO.name,
+      category: smartItemDTO.category,
+      xPos: smartItemDTO.xPos,
+      yPos: smartItemDTO.yPos,
+    });
+
+    return updatedSmartItem;
+  }
+
+  async createSmartItem(smartItemDTO: CreateSmartItemDto) {
+    let newSmartItem = this.smartItemRepo.create();
+    newSmartItem.name = smartItemDTO.name;
+    newSmartItem.category = smartItemDTO.category;
+    newSmartItem.on = smartItemDTO.on;
+    newSmartItem.xPos = smartItemDTO.xPos;
+    newSmartItem.yPos = smartItemDTO.yPos;
+    newSmartItem = await this.smartItemRepo.save(newSmartItem);
+
+    return newSmartItem;
   }
 }

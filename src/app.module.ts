@@ -4,7 +4,6 @@ import { LogModule } from './log/log.module';
 import { UserModule } from './user/user.module';
 import { DatabaseModule } from './infrastructure/data-source/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { CategoryService } from './category/category.service';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -25,6 +24,6 @@ import * as Joi from '@hapi/joi';
     DatabaseModule,
   ],
   controllers: [],
-  providers: [CategoryService],
+  providers: [],
 })
 export class AppModule {}
