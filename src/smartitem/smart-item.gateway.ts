@@ -10,6 +10,7 @@ import { Socket } from 'socket.io';
 import { SmartItem } from './shared/smart-item.model';
 import { CreateSmartItemDto } from '../infrastructure/data-source/dtos/createSmartItem.dto';
 import { EditSmartItemDto } from '../infrastructure/data-source/dtos/editSmartItem.dto';
+import { ToggleSmartItemDto } from "../infrastructure/data-source/dtos/toggleSmartItem.dto";
 
 @WebSocketGateway()
 export class SmartItemGateway {
@@ -20,9 +21,7 @@ export class SmartItemGateway {
   @SubscribeMessage('requestSmartItems')
   async handleGetAllSmartItemsEvent(@ConnectedSocket() client: Socket): Promise<void> {
     const items = await this.siService.getAllSmartItems();
-    // this.server.emit('smartItems', items);
     client.emit('smartItems', items);
-    console.log('smartitems emitted');
   }
 
   @SubscribeMessage('deleteSmartItem')
@@ -41,5 +40,11 @@ export class SmartItemGateway {
   async handleCreateSmartItem(@MessageBody() item: CreateSmartItemDto): Promise<void> {
     const createdSmartItem = await this.siService.createSmartItem(item);
     this.server.emit('createdSmartItem', createdSmartItem);
+  }
+
+  @SubscribeMessage('toggleSmartItem')
+  async handleToggleSmartItem(@MessageBody() item: ToggleSmartItemDto): Promise<void> {
+    const toggledItem = await this.siService.toggleSmartItem(item);
+    this.server.emit('toggledSmartItem', toggledItem);
   }
 }

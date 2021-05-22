@@ -19,6 +19,5 @@ export class CategoryGateway {
     @ConnectedSocket() client: Socket): Promise<void> {
     const categories = await this.categoryService.getAllCategories();
     client.emit('categories', categories);
-    console.log('all categories emitted');
   }
 }

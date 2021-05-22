@@ -6,6 +6,7 @@ import { SmartItemEntity } from '../../infrastructure/data-source/entities/smart
 import { Repository } from 'typeorm';
 import { CreateSmartItemDto } from '../../infrastructure/data-source/dtos/createSmartItem.dto';
 import { EditSmartItemDto } from '../../infrastructure/data-source/dtos/editSmartItem.dto';
+import { ToggleSmartItemDto } from "../../infrastructure/data-source/dtos/toggleSmartItem.dto";
 
 @Injectable()
 export class SmartItemService {
@@ -45,5 +46,14 @@ export class SmartItemService {
     newSmartItem = await this.smartItemRepo.save(newSmartItem);
 
     return newSmartItem;
+  }
+
+  async toggleSmartItem(toggleSmartItemDTO: ToggleSmartItemDto,
+  ): Promise<SmartItem> {
+    await this.smartItemRepo.update(toggleSmartItemDTO.id, {
+      on: toggleSmartItemDTO.on
+    });
+
+    return await this.smartItemRepo.findOne(toggleSmartItemDTO.id);
   }
 }
