@@ -22,6 +22,7 @@ export class SmartItemGateway {
     const items = await this.siService.getAllSmartItems();
     // this.server.emit('smartItems', items);
     client.emit('smartItems', items);
+    console.log('smartitems emitted');
   }
 
   @SubscribeMessage('deleteSmartItem')
