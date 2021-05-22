@@ -18,26 +18,27 @@ export class SmartItemGateway {
   @WebSocketServer() server;
 
   @SubscribeMessage('requestSmartItems')
-  async handleGetAllSmartItemsEvent(@ConnectedSocket() client: Socket): Promise<void>  {
+  async handleGetAllSmartItemsEvent(@ConnectedSocket() client: Socket): Promise<void> {
     const items = await this.siService.getAllSmartItems();
+    // this.server.emit('smartItems', items);
     client.emit('smartItems', items);
   }
 
   @SubscribeMessage('deleteSmartItem')
-  handleDeleteSmartItem(@MessageBody() item: SmartItem) {
-    const deletedItem = this.siService.deleteSmartItem(item);
+  async handleDeleteSmartItem(@MessageBody() item: SmartItem): Promise<void> {
+    const deletedItem = await this.siService.deleteSmartItem(item);
     this.server.emit('deletedSmartItem', deletedItem);
   }
 
   @SubscribeMessage('editSmartItem')
-  handleEditSmartItem(@MessageBody() item: EditSmartItemDto) {
-    const editedItem = this.siService.editSmartItem(item);
+  async handleEditSmartItem(@MessageBody() item: EditSmartItemDto): Promise<void> {
+    const editedItem = await this.siService.editSmartItem(item);
     this.server.emit('editedSmartItem', editedItem);
   }
 
   @SubscribeMessage('createSmartItem')
-  handleCreateSmartItem(@MessageBody() item: CreateSmartItemDto) {
-    const createdSmartItem = this.siService.createSmartItem(item);
+  async handleCreateSmartItem(@MessageBody() item: CreateSmartItemDto): Promise<void> {
+    const createdSmartItem = await this.siService.createSmartItem(item);
     this.server.emit('createdSmartItem', createdSmartItem);
   }
 }
