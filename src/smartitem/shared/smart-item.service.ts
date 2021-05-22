@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { SmartItem } from './smart-item.model';
-import { Category } from '../../category/category.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SmartItemEntity } from '../../infrastructure/data-source/entities/smartItem.entity';
 import { Repository } from 'typeorm';
@@ -14,9 +13,8 @@ export class SmartItemService {
     private smartItemRepo: Repository<SmartItemEntity>,
   ) {}
 
-  async getAllSmartItems() {
-    const smartItems = await this.smartItemRepo.find();
-    return smartItems;
+  async getAllSmartItems(): Promise<SmartItem[]> {
+    return await this.smartItemRepo.find();
   }
 
   async deleteSmartItem(smartItem: SmartItem) {

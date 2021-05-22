@@ -18,9 +18,8 @@ export class SmartItemGateway {
   @WebSocketServer() server;
 
   @SubscribeMessage('requestSmartItems')
-  handleGetAllSmartItemsEvent(@ConnectedSocket() client: Socket): void {
-    const items = this.siService.getAllSmartItems();
-    // this.server.emit('smartItems', items);
+  async handleGetAllSmartItemsEvent(@ConnectedSocket() client: Socket): Promise<void>  {
+    const items = await this.siService.getAllSmartItems();
     client.emit('smartItems', items);
   }
 
