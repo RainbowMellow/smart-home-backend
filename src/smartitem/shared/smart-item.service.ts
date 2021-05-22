@@ -14,7 +14,7 @@ export class SmartItemService {
   ) {}
 
   async getAllSmartItems(): Promise<SmartItem[]> {
-    return await this.smartItemRepo.find();
+    return await this.smartItemRepo.find({ relations: ['category'] });
   }
 
   async deleteSmartItem(smartItem: SmartItem) {
