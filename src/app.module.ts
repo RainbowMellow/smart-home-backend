@@ -5,12 +5,14 @@ import { UserModule } from './user/user.module';
 import { DatabaseModule } from './infrastructure/data-source/database.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
+import { CategoryModule } from "./category/category.module";
 
 @Module({
   imports: [
     SmartItemModule,
     LogModule,
     UserModule,
+    CategoryModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         POSTGRES_HOST: Joi.string().required(),

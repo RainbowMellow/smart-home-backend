@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { SmartItem } from './smart-item.model';
-import { Category } from '../../category/category.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SmartItemEntity } from '../../infrastructure/data-source/entities/smartItem.entity';
 import { Repository } from 'typeorm';
 import { CreateSmartItemDto } from '../../infrastructure/data-source/dtos/createSmartItem.dto';
 import { EditSmartItemDto } from '../../infrastructure/data-source/dtos/editSmartItem.dto';
-import { ToggleDto } from '../../infrastructure/data-source/dtos/toggle.dto';
+import { ToggleSmartItemDto } from '../../infrastructure/data-source/dtos/toggleSmartItem.dto';
 
 @Injectable()
 export class SmartItemService {
@@ -15,28 +14,28 @@ export class SmartItemService {
     private smartItemRepo: Repository<SmartItemEntity>,
   ) {}
 
-  async getAllSmartItems() {
-    const smartItems = await this.smartItemRepo.find();
-    return smartItems;
+  async getAllSmartItems(): Promise<SmartItem[]> {
+    return await this.smartItemRepo.find({ relations: ['category'] });
   }
 
-  async deleteSmartItem(smartItem: SmartItem) {
-    const deletedSmartItem = await this.smartItemRepo.delete(smartItem);
-    return deletedSmartItem;
+  async deleteSmartItem(smartItem: SmartItem): Promise<SmartItem> {
+    await this.smartItemRepo.delete(smartItem);
+
+    return await this.smartItemRepo.findOne(smartItem.id);
   }
 
-  async editSmartItem(smartItemDTO: EditSmartItemDto) {
-    const updatedSmartItem = await this.smartItemRepo.update(smartItemDTO.id, {
+  async editSmartItem(smartItemDTO: EditSmartItemDto): Promise<SmartItem> {
+    await this.smartItemRepo.update(smartItemDTO.id, {
       name: smartItemDTO.name,
       category: smartItemDTO.category,
       xPos: smartItemDTO.xPos,
       yPos: smartItemDTO.yPos,
     });
 
-    return updatedSmartItem;
+    return await this.smartItemRepo.findOne(smartItemDTO.id);
   }
 
-  async createSmartItem(smartItemDTO: CreateSmartItemDto) {
+  async createSmartItem(smartItemDTO: CreateSmartItemDto): Promise<SmartItem> {
     let newSmartItem = this.smartItemRepo.create();
     newSmartItem.name = smartItemDTO.name;
     newSmartItem.category = smartItemDTO.category;
@@ -48,10 +47,13 @@ export class SmartItemService {
     return newSmartItem;
   }
 
-  async toggleSmartItem(toggleDto: ToggleDto): Promise<ToggleDto> {
-    await this.smartItemRepo.update(toggleDto.id, {
-      on: toggleDto.on,
+  async toggleSmartItem(
+    toggleSmartItemDTO: ToggleSmartItemDto,
+  ): Promise<SmartItem> {
+    await this.smartItemRepo.update(toggleSmartItemDTO.id, {
+      on: toggleSmartItemDTO.on,
     });
-    return toggleDto;
+
+    return await this.smartItemRepo.findOne(toggleSmartItemDTO.id);
   }
 }

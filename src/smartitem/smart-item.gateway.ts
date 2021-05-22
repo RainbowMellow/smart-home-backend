@@ -10,7 +10,7 @@ import { Socket } from 'socket.io';
 import { SmartItem } from './shared/smart-item.model';
 import { CreateSmartItemDto } from '../infrastructure/data-source/dtos/createSmartItem.dto';
 import { EditSmartItemDto } from '../infrastructure/data-source/dtos/editSmartItem.dto';
-import { ToggleDto } from '../infrastructure/data-source/dtos/toggle.dto';
+import { ToggleSmartItemDto } from '../infrastructure/data-source/dtos/toggleSmartItem.dto';
 
 @WebSocketGateway()
 export class SmartItemGateway {
@@ -19,35 +19,40 @@ export class SmartItemGateway {
   @WebSocketServer() server;
 
   @SubscribeMessage('requestSmartItems')
-  handleGetAllSmartItemsEvent(@ConnectedSocket() client: Socket): void {
-    const items = this.siService.getAllSmartItems();
-    // this.server.emit('smartItems', items);
+  async handleGetAllSmartItemsEvent(
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    const items = await this.siService.getAllSmartItems();
     client.emit('smartItems', items);
   }
 
   @SubscribeMessage('deleteSmartItem')
-  handleDeleteSmartItem(@MessageBody() item: SmartItem) {
-    const deletedItem = this.siService.deleteSmartItem(item);
+  async handleDeleteSmartItem(@MessageBody() item: SmartItem): Promise<void> {
+    const deletedItem = await this.siService.deleteSmartItem(item);
     this.server.emit('deletedSmartItem', deletedItem);
   }
 
   @SubscribeMessage('editSmartItem')
-  handleEditSmartItem(@MessageBody() item: EditSmartItemDto) {
-    const editedItem = this.siService.editSmartItem(item);
+  async handleEditSmartItem(
+    @MessageBody() item: EditSmartItemDto,
+  ): Promise<void> {
+    const editedItem = await this.siService.editSmartItem(item);
     this.server.emit('editedSmartItem', editedItem);
   }
 
   @SubscribeMessage('createSmartItem')
-  handleCreateSmartItem(@MessageBody() item: CreateSmartItemDto) {
-    const createdSmartItem = this.siService.createSmartItem(item);
+  async handleCreateSmartItem(
+    @MessageBody() item: CreateSmartItemDto,
+  ): Promise<void> {
+    const createdSmartItem = await this.siService.createSmartItem(item);
     this.server.emit('createdSmartItem', createdSmartItem);
   }
 
   @SubscribeMessage('toggleSmartItem')
-  async handleToggleSmartItem(@MessageBody() item: ToggleDto) {
-    this.server.emit(
-      'toggledSmartItem',
-      await this.siService.toggleSmartItem(item),
-    );
+  async handleToggleSmartItem(
+    @MessageBody() item: ToggleSmartItemDto,
+  ): Promise<void> {
+    const toggledItem = await this.siService.toggleSmartItem(item);
+    this.server.emit('toggledSmartItem', toggledItem);
   }
 }
