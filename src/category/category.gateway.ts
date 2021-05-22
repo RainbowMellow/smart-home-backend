@@ -15,8 +15,8 @@ export class CategoryGateway {
   @WebSocketServer() server;
 
   @SubscribeMessage('getAllCategories')
-  handleGetAllCategories(@ConnectedSocket() client: Socket): void {
-    const categories = this.categoryService.readAllCategories();
+  async handleGetAllCategories(@ConnectedSocket() client: Socket): Promise<void> {
+    const categories = await this.categoryService.readAllCategories();
     client.emit('categories', categories);
   }
 }

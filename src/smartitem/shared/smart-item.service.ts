@@ -14,28 +14,29 @@ export class SmartItemService {
     private smartItemRepo: Repository<SmartItemEntity>,
   ) {}
 
-  async getAllSmartItems() {
+  async getAllSmartItems(): Promise<SmartItem[]> {
     const smartItems = await this.smartItemRepo.find();
     return smartItems;
   }
 
-  async deleteSmartItem(smartItem: SmartItem) {
-    const deletedSmartItem = await this.smartItemRepo.delete(smartItem);
-    return deletedSmartItem;
+  async deleteSmartItem(smartItem: SmartItem): Promise<SmartItem> {
+    await this.smartItemRepo.delete(smartItem);
+
+    return await this.smartItemRepo.findOne(smartItem.id);
   }
 
-  async editSmartItem(smartItemDTO: EditSmartItemDto) {
-    const updatedSmartItem = await this.smartItemRepo.update(smartItemDTO.id, {
+  async editSmartItem(smartItemDTO: EditSmartItemDto): Promise<SmartItem> {
+    await this.smartItemRepo.update(smartItemDTO.id, {
       name: smartItemDTO.name,
       category: smartItemDTO.category,
       xPos: smartItemDTO.xPos,
       yPos: smartItemDTO.yPos,
     });
 
-    return updatedSmartItem;
+    return await this.smartItemRepo.findOne(smartItemDTO.id);
   }
 
-  async createSmartItem(smartItemDTO: CreateSmartItemDto) {
+  async createSmartItem(smartItemDTO: CreateSmartItemDto): Promise<SmartItem> {
     let newSmartItem = this.smartItemRepo.create();
     newSmartItem.name = smartItemDTO.name;
     newSmartItem.category = smartItemDTO.category;

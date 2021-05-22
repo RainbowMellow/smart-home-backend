@@ -11,7 +11,7 @@ export class CategoryService {
     private categoryRepo: Repository<CategoryEntity>,
   ) {}
 
-  async readAllCategories() {
+  async readAllCategories(): Promise<Category[]> {
     const categoryList = await this.categoryRepo.find();
     const categories: Category[] = JSON.parse(JSON.stringify(categoryList));
 
