@@ -48,12 +48,11 @@ export class SmartItemService {
   }
 
   async toggleSmartItem(
-    toggleSmartItemDTO: ToggleSmartItemDto,
-  ): Promise<SmartItem> {
+    toggleSmartItemDTO: ToggleSmartItemDto): Promise<ToggleSmartItemDto> {
     await this.smartItemRepo.update(toggleSmartItemDTO.id, {
       on: toggleSmartItemDTO.on,
     });
 
-    return await this.smartItemRepo.findOne(toggleSmartItemDTO.id);
+    return toggleSmartItemDTO;
   }
 }
