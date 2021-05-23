@@ -21,7 +21,7 @@ export class SmartItemService {
   async deleteSmartItem(smartItem: SmartItem): Promise<SmartItem> {
     await this.smartItemRepo.delete(smartItem);
 
-    return await this.smartItemRepo.findOne(smartItem.id);
+    return await this.smartItemRepo.findOne(smartItem.id); // how can deleted item be found...?
   }
 
   async editSmartItem(smartItemDTO: EditSmartItemDto): Promise<SmartItem> {
@@ -39,7 +39,7 @@ export class SmartItemService {
     let newSmartItem = this.smartItemRepo.create();
     newSmartItem.name = smartItemDTO.name;
     newSmartItem.category = smartItemDTO.category;
-    newSmartItem.on = smartItemDTO.on;
+    newSmartItem.on = false;
     newSmartItem.xPos = smartItemDTO.xPos;
     newSmartItem.yPos = smartItemDTO.yPos;
     newSmartItem = await this.smartItemRepo.save(newSmartItem);
@@ -48,7 +48,8 @@ export class SmartItemService {
   }
 
   async toggleSmartItem(
-    toggleSmartItemDTO: ToggleSmartItemDto): Promise<ToggleSmartItemDto> {
+    toggleSmartItemDTO: ToggleSmartItemDto,
+  ): Promise<ToggleSmartItemDto> {
     await this.smartItemRepo.update(toggleSmartItemDTO.id, {
       on: toggleSmartItemDTO.on,
     });

@@ -16,20 +16,20 @@ export class UserGateway {
   @WebSocketServer() server;
 
   @SubscribeMessage('requestLogin')
-  handleAddUser(
+  async handleAddUser(
     @MessageBody() user: User,
     @ConnectedSocket() client: Socket,
-  ): void {
-    const loggedInUser = this.userService.login(user);
+  ): Promise<void> {
+    const loggedInUser = await this.userService.login(user);
     client.emit('loggedIn', loggedInUser);
   }
 
   @SubscribeMessage('requestLogout')
-  handleRemoveUser(
+  async handleRemoveUser(
     @MessageBody() user: User,
     @ConnectedSocket() client: Socket,
-  ): void {
-    const loggedOutUser = this.userService.logout(user);
+  ): Promise<void> {
+    const loggedOutUser = await this.userService.logout(user);
     client.emit('loggedOut', loggedOutUser);
   }
 }
