@@ -21,7 +21,7 @@ export class LogMessageEntity {
   public item?: SmartItem;
 
   @Column()
-  public user: string;
+  public userString: string;
 
   @Column()
   public timeStamp: Date;

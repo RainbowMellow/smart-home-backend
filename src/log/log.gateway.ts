@@ -16,18 +16,18 @@ export class LogGateway {
   @WebSocketServer() server;
 
   @SubscribeMessage('requestLog')
-  handleLogRequest(@ConnectedSocket() client: Socket): void {
-    const log = this.logService.getAllLogMessages();
+  async handleLogRequest(@ConnectedSocket() client: Socket): Promise<void> {
+    const log = await this.logService.getAllLogMessages();
     client.emit('allLogMessages', log);
   }
 
   @SubscribeMessage('triggerLogMessage')
-  handleNewLog(
+  async handleNewLog(
     @MessageBody() message: LogMessage,
     @ConnectedSocket() client: Socket,
-  ): void {
+  ): Promise<void> {
     console.log('logmessage', message.message);
-    const loggedMessage = this.logService.addNewLogMessage(message);
+    const loggedMessage = await this.logService.addNewLogMessage(message);
     this.server.emit('newLogMessage', loggedMessage);
   }
 }
