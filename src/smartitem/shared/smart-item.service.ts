@@ -18,10 +18,10 @@ export class SmartItemService {
     return await this.smartItemRepo.find({ relations: ['category'] });
   }
 
-  async deleteSmartItem(smartItem: SmartItem): Promise<SmartItem> {
-    await this.smartItemRepo.delete(smartItem);
+  async deleteSmartItem(id: number): Promise<void> {
+    await this.smartItemRepo.delete({ id: id });
 
-    return await this.smartItemRepo.findOne(smartItem.id); // how can deleted item be found...?
+    // return await this.smartItemRepo.findOne(smartItem.id); // how can deleted item be found...?
   }
 
   async editSmartItem(smartItemDTO: EditSmartItemDto): Promise<SmartItem> {
