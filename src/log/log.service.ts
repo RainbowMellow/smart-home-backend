@@ -55,6 +55,6 @@ export class LogService {
 
   async deleteLogMessage(id: number): Promise<boolean> {
     await this.logRepo.delete({ id: id });
-    return !(await this.logRepo.findOne({ where: { id: id } }));
+    return !(await this.logRepo.findOne(id));
   }
 }

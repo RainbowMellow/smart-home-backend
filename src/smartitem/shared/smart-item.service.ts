@@ -35,8 +35,7 @@ export class SmartItemService {
       yPos: smartItemDTO.yPos,
     });
 
-    return await this.smartItemRepo.findOne({
-      where: { id: smartItemDTO.id },
+    return await this.smartItemRepo.findOne(smartItemDTO.id, {
       relations: ['category'],
     });
   }
