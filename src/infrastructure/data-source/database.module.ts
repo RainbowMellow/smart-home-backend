@@ -25,6 +25,12 @@ import { SmartItemEntity } from './entities/smartItem.entity';
           SmartItemEntity,
         ],
         synchronize: true,
+        ssl: true,
+        extra: {
+          ssl: {
+            rejectUnauthorized: false,
+          },
+        },
       }),
     }),
   ],
