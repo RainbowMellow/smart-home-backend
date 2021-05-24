@@ -15,13 +15,16 @@ export class SmartItemService {
   ) {}
 
   async getAllSmartItems(): Promise<SmartItem[]> {
-    return await this.smartItemRepo.find({ relations: ['category'] });
+    return await this.smartItemRepo.find({
+      where: { active: true },
+      relations: ['category'],
+    });
   }
 
   async deleteSmartItem(id: number): Promise<void> {
-    await this.smartItemRepo.delete({ id: id });
-
-    // return await this.smartItemRepo.findOne(smartItem.id); // how can deleted item be found...?
+    await this.smartItemRepo.update(id, {
+      active: false,
+    });
   }
 
   async editSmartItem(smartItemDTO: EditSmartItemDto): Promise<SmartItem> {
@@ -32,7 +35,10 @@ export class SmartItemService {
       yPos: smartItemDTO.yPos,
     });
 
-    return await this.smartItemRepo.findOne(smartItemDTO.id);
+    return await this.smartItemRepo.findOne({
+      where: { id: smartItemDTO.id },
+      relations: ['category'],
+    });
   }
 
   async createSmartItem(smartItemDTO: CreateSmartItemDto): Promise<SmartItem> {
@@ -42,6 +48,7 @@ export class SmartItemService {
     newSmartItem.on = false;
     newSmartItem.xPos = smartItemDTO.xPos;
     newSmartItem.yPos = smartItemDTO.yPos;
+    newSmartItem.active = true;
     newSmartItem = await this.smartItemRepo.save(newSmartItem);
 
     return newSmartItem;
