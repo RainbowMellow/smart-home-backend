@@ -21,7 +21,7 @@ export class SmartItemService {
   async deleteSmartItem(smartItem: SmartItem): Promise<SmartItem> {
     await this.smartItemRepo.delete(smartItem);
 
-    return await this.smartItemRepo.findOne(smartItem.id);
+    return await this.smartItemRepo.findOne(smartItem.id,{ relations: ['category'] });
   }
 
   async editSmartItem(smartItemDTO: EditSmartItemDto): Promise<SmartItem> {
@@ -32,7 +32,7 @@ export class SmartItemService {
       yPos: smartItemDTO.yPos,
     });
 
-    return await this.smartItemRepo.findOne(smartItemDTO.id);
+    return await this.smartItemRepo.findOne(smartItemDTO.id,{ relations: ['category'] });
   }
 
   async createSmartItem(smartItemDTO: CreateSmartItemDto): Promise<SmartItem> {
