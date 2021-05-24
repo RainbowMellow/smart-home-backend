@@ -2,7 +2,7 @@ pipeline {
     agent any
 	triggers {
 		// cron 'H * * * *'
-		pollSCM 'H/3 * * * *'
+		// pollSCM 'H/3 * * * *'
 	}
     stages {
 		stage('Build web and api in parallel') {
