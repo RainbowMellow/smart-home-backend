@@ -5,6 +5,6 @@ export interface LogMessage {
   id?: number;
   message: string;
   item?: SmartItem;
-  userString?: string;
+  userString: string;
   timeStamp: Date;
 }

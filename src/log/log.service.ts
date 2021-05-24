@@ -1,37 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { LogMessage } from './log-message.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { LogMessageEntity } from '../infrastructure/data-source/entities/log-message.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class LogService {
-  logMessages: LogMessage[] = [];
-  nextId = 1;
-
-  constructor() {
+  constructor(
+    @InjectRepository(LogMessageEntity)
+    private logRepo: Repository<LogMessageEntity>,
+  ) {
     this.seedData();
   }
 
-  private seedData() {
-    const message1: LogMessage = {
-      message: 'Log was created',
-      item: null,
-      timeStamp: new Date(),
-    };
-    const message2: LogMessage = {
-      message: 'All items are off',
-      item: null,
-      timeStamp: new Date(),
-    };
-    this.addNewLogMessage(message1);
-    this.addNewLogMessage(message2);
+  private async seedData() {
+    if ((await this.logRepo.count()) == 0) { // unsure if count works correctly
+      const message1: LogMessage = {
+        userString: '',
+        message: 'Log was created',
+        timeStamp: new Date(),
+      };
+      const message2: LogMessage = {
+        userString: '',
+        message: 'All items are off',
+        timeStamp: new Date(),
+      };
+      await this.addNewLogMessage(message1);
+      await this.addNewLogMessage(message2);
+    }
   }
 
-  getAllLogMessages(): LogMessage[] {
-    return this.logMessages;
+  async getAllLogMessages(): Promise<LogMessage[]> {
+    return await this.logRepo.find({ relations: ['item'] });
   }
 
-  addNewLogMessage(message: LogMessage): LogMessage {
-    message.id = this.nextId++;
-    this.logMessages.push(message);
-    return message;
+  async addNewLogMessage(message: LogMessage): Promise<LogMessage> {
+    const createdMessage = this.logRepo.create();
+    createdMessage.message = message.message;
+    createdMessage.userString = message.userString;
+    createdMessage.item = message.item;
+    createdMessage.timeStamp = message.timeStamp;
+    return await this.logRepo.save(createdMessage);
   }
 }

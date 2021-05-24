@@ -5,7 +5,7 @@ import { UserModule } from './user/user.module';
 import { DatabaseModule } from './infrastructure/data-source/database.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
-import { CategoryModule } from "./category/category.module";
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
