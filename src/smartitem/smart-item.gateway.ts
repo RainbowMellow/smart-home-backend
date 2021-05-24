@@ -27,9 +27,9 @@ export class SmartItemGateway {
   }
 
   @SubscribeMessage('deleteSmartItem')
-  async handleDeleteSmartItem(@MessageBody() item: SmartItem): Promise<void> {
-    const deletedItem = await this.siService.deleteSmartItem(item);
-    this.server.emit('deletedSmartItem', deletedItem);
+  async handleDeleteSmartItem(@MessageBody() id: number): Promise<void> {
+    await this.siService.deleteSmartItem(id);
+    this.server.emit('deletedSmartItem', id);
   }
 
   @SubscribeMessage('editSmartItem')
