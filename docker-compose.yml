@@ -1,0 +1,13 @@
+version: "3.3"
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgresdb
+    restart: always
+    ports:
+      - 5000:5432
+    volumes:
+    - /data/postgres:/data/postgres
+    env_file:
+    - docker.env

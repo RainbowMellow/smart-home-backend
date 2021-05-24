@@ -1,42 +1,59 @@
 import { Injectable } from '@nestjs/common';
 import { SmartItem } from './smart-item.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { SmartItemEntity } from '../../infrastructure/data-source/entities/smartItem.entity';
+import { Repository } from 'typeorm';
+import { CreateSmartItemDto } from '../../infrastructure/data-source/dtos/createSmartItem.dto';
+import { EditSmartItemDto } from '../../infrastructure/data-source/dtos/editSmartItem.dto';
+import { ToggleSmartItemDto } from '../../infrastructure/data-source/dtos/toggleSmartItem.dto';
 
 @Injectable()
 export class SmartItemService {
-  smartItems: SmartItem[] = [];
+  constructor(
+    @InjectRepository(SmartItemEntity)
+    private smartItemRepo: Repository<SmartItemEntity>,
+  ) {}
 
-  constructor() {
-    this.seedData();
+  async getAllSmartItems(): Promise<SmartItem[]> {
+    return await this.smartItemRepo.find({ relations: ['category'] });
   }
 
-  seedData(): void {
-    const item1: SmartItem = {
-      id: 1,
-      name: 'HP Lamp',
-      xPos: 1,
-      yPos: 1,
-      on: false,
-    };
-    const item2: SmartItem = {
-      id: 2,
-      name: 'Bedroom Lamp',
-      xPos: 2,
-      yPos: 2,
-      on: true,
-    };
-    const item3: SmartItem = {
-      id: 3,
-      name: 'Dining Room Lamp',
-      xPos: 3,
-      yPos: 3,
-      on: false,
-    };
-    this.smartItems.push(item1);
-    this.smartItems.push(item2);
-    this.smartItems.push(item3);
+  async deleteSmartItem(id: number): Promise<void> {
+    await this.smartItemRepo.delete({ id: id });
+
+    // return await this.smartItemRepo.findOne(smartItem.id); // how can deleted item be found...?
   }
 
-  getAllSmartItems(): SmartItem[] {
-    return this.smartItems;
+  async editSmartItem(smartItemDTO: EditSmartItemDto): Promise<SmartItem> {
+    await this.smartItemRepo.update(smartItemDTO.id, {
+      name: smartItemDTO.name,
+      category: smartItemDTO.category,
+      xPos: smartItemDTO.xPos,
+      yPos: smartItemDTO.yPos,
+    });
+
+    return await this.smartItemRepo.findOne(smartItemDTO.id);
+  }
+
+  async createSmartItem(smartItemDTO: CreateSmartItemDto): Promise<SmartItem> {
+    let newSmartItem = this.smartItemRepo.create();
+    newSmartItem.name = smartItemDTO.name;
+    newSmartItem.category = smartItemDTO.category;
+    newSmartItem.on = false;
+    newSmartItem.xPos = smartItemDTO.xPos;
+    newSmartItem.yPos = smartItemDTO.yPos;
+    newSmartItem = await this.smartItemRepo.save(newSmartItem);
+
+    return newSmartItem;
+  }
+
+  async toggleSmartItem(
+    toggleSmartItemDTO: ToggleSmartItemDto,
+  ): Promise<ToggleSmartItemDto> {
+    await this.smartItemRepo.update(toggleSmartItemDTO.id, {
+      on: toggleSmartItemDTO.on,
+    });
+
+    return toggleSmartItemDTO;
   }
 }

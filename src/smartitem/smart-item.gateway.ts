@@ -1,11 +1,16 @@
 import {
   ConnectedSocket,
+  MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { SmartItemService } from './shared/smart-item.service';
 import { Socket } from 'socket.io';
+import { SmartItem } from './shared/smart-item.model';
+import { CreateSmartItemDto } from '../infrastructure/data-source/dtos/createSmartItem.dto';
+import { EditSmartItemDto } from '../infrastructure/data-source/dtos/editSmartItem.dto';
+import { ToggleSmartItemDto } from '../infrastructure/data-source/dtos/toggleSmartItem.dto';
 
 @WebSocketGateway()
 export class SmartItemGateway {
@@ -14,9 +19,40 @@ export class SmartItemGateway {
   @WebSocketServer() server;
 
   @SubscribeMessage('requestSmartItems')
-  handleGetAllSmartItemsEvent(@ConnectedSocket() client: Socket): void {
-    const items = this.siService.getAllSmartItems();
-    // this.server.emit('smartItems', items);
+  async handleGetAllSmartItemsEvent(
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    const items = await this.siService.getAllSmartItems();
     client.emit('smartItems', items);
+  }
+
+  @SubscribeMessage('deleteSmartItem')
+  async handleDeleteSmartItem(@MessageBody() id: number): Promise<void> {
+    await this.siService.deleteSmartItem(id);
+    this.server.emit('deletedSmartItem', id);
+  }
+
+  @SubscribeMessage('editSmartItem')
+  async handleEditSmartItem(
+    @MessageBody() item: EditSmartItemDto,
+  ): Promise<void> {
+    const editedItem = await this.siService.editSmartItem(item);
+    this.server.emit('editedSmartItem', editedItem);
+  }
+
+  @SubscribeMessage('createSmartItem')
+  async handleCreateSmartItem(
+    @MessageBody() item: CreateSmartItemDto,
+  ): Promise<void> {
+    const createdSmartItem = await this.siService.createSmartItem(item);
+    this.server.emit('createdSmartItem', createdSmartItem);
+  }
+
+  @SubscribeMessage('toggleSmartItem')
+  async handleToggleSmartItem(
+    @MessageBody() item: ToggleSmartItemDto,
+  ): Promise<void> {
+    const toggledItem = await this.siService.toggleSmartItem(item);
+    this.server.emit('toggledSmartItem', toggledItem);
   }
 }
