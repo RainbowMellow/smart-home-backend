@@ -7,6 +7,7 @@ pipeline {
     stages {
 		stage('Build web and api in parallel') {
             steps {
+			/*
 				parallel(
 					buildWeb: {
 						sh "dotnet build src/WebUI/WebUI.csproj"
@@ -18,6 +19,10 @@ pipeline {
 						sh "docker build ./src/API -t gruppe1devops/todoit-api"
 					}
 				)
+			*/
+			
+            sh "npm install"
+            sh "npm run build"			
 			}
 		}
         stage("Build database") {
