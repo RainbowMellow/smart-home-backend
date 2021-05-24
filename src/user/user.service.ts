@@ -21,11 +21,7 @@ export class UserService {
 
   async removeUser(id: number): Promise<boolean> {
     await this.userRepo.delete({ id: id });
-    return !(await this.getUser(id));
-  }
-
-  async getUser(id: number): Promise<User> {
-    return await this.userRepo.findOne({ where: { id: id } });
+    return !(await this.userRepo.findOne(id));
   }
 
   // change later - right now adding users to database could cause problems
