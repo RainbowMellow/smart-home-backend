@@ -15,7 +15,7 @@ services:
     backend:
         image: tr0els/smarthome-backend:${BUILD_NUMBER}
         restart: always
-        # ports?
+        # ports? set in other compose files?
         
     frontend:
         image: tr0els/smarthome-frontend:${BUILD_NUMBER}
