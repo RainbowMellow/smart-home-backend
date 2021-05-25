@@ -12,7 +12,7 @@ export class LogService {
     @InjectRepository(LogMessageEntity)
     private logRepo: Repository<LogMessageEntity>,
   ) {
-    this.seedLogMessages(false);
+    // this.seedLogMessages(false);
   }
 
   private async seedLogMessages(cleandb: boolean): Promise<void> {
