@@ -1,30 +1,13 @@
 version: "3.3"
 
 services:
-  flyway:
-    image: flyway/flyway
-    container_name: flyway
-    command: migrate
-    volumes:
-      - ./db:/flyway/sql
-      - ./db:/flyway/conf
-    depends_on: 
-      - postgres
-      
-  backend:
-    image: tr0els/smarthome-backend
-    container_name: backend
-    depends_on: 
-      - postgres
-    ports: 
-      - 11000:80
-      
-  frontend:
-    image: tr0els/smarthome-frontend
-    container_name: frontend
-    depends_on: 
-      - backend
-    ports:
-      - 4205:80
-      
-# docker-compose -f docker-compose.yml -f docker-compose.test.yml up
+    backend:
+        environment:
+            EnvironmentName: Test
+        ports:
+            - 61002:80
+    frontend:
+        environment:
+            EnvironmentName: Test
+        ports:
+            - 61001:80
