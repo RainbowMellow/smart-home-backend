@@ -1,21 +1,20 @@
 version: "3.3"
 
 services:
-    #postgres:
-    #    image: postgres:latest
-    #    container_name: postgres
-    #    restart: always
-    #    ports:
-    #        - 5000:5432
-    #    volumes:
-    #        - /data/postgres:/data/postgres
-    #    env_file:
-    #        - docker.env
+    postgres:
+        image: postgres:latest
+        container_name: postgres
+        restart: always
+        ports:
+            - 5000:5432
+        volumes:
+            - /data/postgres:/data/postgres
+        env_file:
+            - docker.env
     
-    # backend:
-    #    image: tr0els/smarthome-backend:${BUILD_NUMBER}
-    #    restart: always
-        # ports? set in other compose files?
+     backend:
+        image: tr0els/smarthome-backend #:${BUILD_NUMBER}
+        restart: always
         
     frontend:
         image: tr0els/smarthome-frontend #:${BUILD_NUMBER}
