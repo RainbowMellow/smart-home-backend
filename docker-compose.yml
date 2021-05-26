@@ -11,11 +11,12 @@ services:
             - /data/postgres:/data/postgres
         env_file:
             - docker.env
-
-    backend:
-        image: tr0els/smarthome-backend #:${BUILD_NUMBER}
-        restart: always
-        
-    frontend:
-        image: tr0els/smarthome-frontend #:${BUILD_NUMBER}
-        restart: always
+            
+    flyway:
+        image: flyway/flyway
+        command: migrate
+        volumes:
+            - ./db:/flyway/sql
+            - ./db:/flyway/conf
+        depends_on: 
+            - postgres

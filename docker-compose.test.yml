@@ -2,11 +2,16 @@ version: "3.3"
 
 services:
     backend:
+        image: tr0els/smarthome-backend #:${BUILD_NUMBER}
+        restart: always
         environment:
             EnvironmentName: Test
         ports:
             - 20001:80
+            
     frontend:
+        image: tr0els/smarthome-frontend #:${BUILD_NUMBER}
+        restart: always
         environment:
             EnvironmentName: Test
         ports:
