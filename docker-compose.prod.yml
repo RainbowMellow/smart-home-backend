@@ -1,20 +1,20 @@
 version: "3.3"
 
 services: 
-  backend:
-    image: tr0els/smarthome-backend:${PROMOTE_BUILD_NUMBER}
-    environment: 
-      EnvironmentName: Production
-    depends_on: 
-      - database
-    ports: 
-      - 62002:80
+#  backend:
+#    image: tr0els/smarthome-backend:${PROMOTE_BUILD_NUMBER}
+#    environment: 
+#      EnvironmentName: Production
+#    depends_on: 
+#      - database
+#    ports: 
+ #     - 21002:80
       
   frontend:
-    image: tr0els/smarthome-frontend:${PROMOTE_BUILD_NUMBER}
+    image: tr0els/smarthome-frontend #:${PROMOTE_BUILD_NUMBER}
     environment: 
       EnvironmentName: Production
-    depends_on: 
-      - backend
+#    depends_on: 
+#      - backend
     ports: 
-      - 62001:80
+      - 21000:80

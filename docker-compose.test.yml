@@ -1,13 +1,15 @@
 version: "3.3"
 
 services:
-    backend:
-        environment:
-            EnvironmentName: Test
-        ports:
-            - 61002:80
+#    backend:
+#        environment:
+#            EnvironmentName: Test
+#        ports:
+  #          - 20002:80
     frontend:
         environment:
             EnvironmentName: Test
         ports:
-            - 61001:80
+            - 20000:80
+            
+#postre med anden port?
