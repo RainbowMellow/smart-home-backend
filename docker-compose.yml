@@ -11,8 +11,8 @@ services:
             - /data/postgres:/data/postgres
         env_file:
             - docker.env
-    
-     backend:
+
+    backend:
         image: tr0els/smarthome-backend #:${BUILD_NUMBER}
         restart: always
         
