@@ -23,4 +23,7 @@ export class SmartItemEntity {
 
   @Column()
   public on: boolean;
+
+  @Column()
+  public active: boolean;
 }
