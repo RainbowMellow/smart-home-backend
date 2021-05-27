@@ -50,7 +50,9 @@ export class SmartItemService {
     newSmartItem.active = true;
     newSmartItem = await this.smartItemRepo.save(newSmartItem);
 
-    return newSmartItem;
+    return await this.smartItemRepo.findOne(newSmartItem.id, {
+      relations: ['category'],
+    });
   }
 
   async toggleSmartItem(
