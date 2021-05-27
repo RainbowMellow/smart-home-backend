@@ -20,3 +20,11 @@ services:
             - ./db:/flyway/conf
         depends_on: 
             - postgres
+            
+    backend:
+        image: tr0els/smarthome-backend #:${BUILD_NUMBER}
+        restart: always
+            
+    frontend:
+        image: tr0els/smarthome-frontend #:${BUILD_NUMBER}
+        restart: always
