@@ -23,10 +23,7 @@ export class LogGateway {
 
   @SubscribeMessage('triggerLogMessage')
   async handleNewLog(
-    @MessageBody() message: LogMessage,
-    @ConnectedSocket() client: Socket,
-  ): Promise<void> {
-    console.log('logmessage', message.message);
+    @MessageBody() message: LogMessage): Promise<void> {
     const loggedMessage = await this.logService.addNewLogMessage(message);
     this.server.emit('newLogMessage', loggedMessage);
   }

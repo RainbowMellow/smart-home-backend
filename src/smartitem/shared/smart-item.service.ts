@@ -64,4 +64,10 @@ export class SmartItemService {
 
     return toggleSmartItemDTO;
   }
+
+  async getSmartItemById(id: number): Promise<SmartItem> {
+    return await this.smartItemRepo.findOne(id, {
+      relations: ['category'],
+    });
+  }
 }
